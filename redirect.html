@@ -1,42 +1,28 @@
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Redirecting...</title>
-  <script src="https://cdn.jsdelivr.net/npm/fhirclient@2.1.7/build/fhir-client.min.js"></script>
-  <script>
-    window.onload = function () {
-      FHIR.oauth2.ready()
-        .then(client => {
-          const patientId = client.patient?.id;
-          const accessToken = client.state?.tokenResponse?.access_token;
-          const fhirBaseUrl = client.state?.serverUrl || "https://launch.smarthealthit.org/v/r4";
+<script>
+  window.onload = function () {
+    FHIR.oauth2.ready()
+      .then(client => {
+        console.log("✅ FHIR Client Ready");
+        console.log("Patient ID:", client.patient.id);
+        console.log("Access Token:", client.state.tokenResponse.access_token);
 
-          if (!patientId || !accessToken) {
-            throw new Error("Missing patient ID or access token.");
-          }
+        const patientId = client.patient.id;
+        const accessToken = client.state.tokenResponse.access_token;
 
-          // ✅ حفظ البيانات في التخزين المؤقت
-          sessionStorage.setItem("patient_id", patientId);
-          sessionStorage.setItem("access_token", accessToken);
-          sessionStorage.setItem("fhir_base_url", fhirBaseUrl);
+        // حفظ البيانات في التخزين المؤقت
+        sessionStorage.setItem("patient_id", patientId);
+        sessionStorage.setItem("access_token", accessToken);
 
-          // ✅ الانتقال لصفحة عرض بيانات المريض
-          window.location.href = "patient-data.html";
-        })
-        .catch(error => {
-          // ❌ عرض الخطأ إذا فشل تسجيل الدخول
-          console.error("OAuth2 Redirect Error:", error);
-          document.body.innerHTML = `
-            <h3 style="color: red;">❌ Error during OAuth2 redirect:</h3>
-            <pre>${error.message || JSON.stringify(error, null, 2)}</pre>
-          `;
-        });
-    };
-  </script>
-</head>
-<body>
-  <p>⏳ Redirecting... Please wait...</p>
-</body>
-</html>
+        // الانتقال لصفحة عرض بيانات المريض
+        window.location.href = "patient-data.html";
+      })
+      .catch(error => {
+        console.error("❌ OAuth2 redirect error:", error);
+        document.body.innerHTML = `
+          <h3 style="color: red;">❌ Error during OAuth2 redirect:</h3>
+          <pre>${JSON.stringify(error, null, 2)}</pre>
+        `;
+      });
+  };
+</script>
