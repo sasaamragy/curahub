@@ -1,58 +1,34 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Redirecting...</title>
+  <script src="https://cdn.jsdelivr.net/npm/fhirclient@2.1.11/build/fhir-client.min.js"></script>
   <script>
-    async function exchangeCodeForToken(code) {
-      const tokenUrl = "https://launch.smarthealthit.org/v/r4/auth/token";
-      const clientId = "curahub-client-app"; // Client ID من SMART Launcher
-
-      // ✅ بدّلي بالرابط الفعلي لموقعك (لو GitHub Pages أو Netlify)
-      const redirectUri = "https://sasaamragy.github.io/curahub/redirect.html";
-
-      const params = new URLSearchParams();
-      params.append("grant_type", "authorization_code");
-      params.append("code", code);
-      params.append("redirect_uri", redirectUri);
-      params.append("client_id", clientId);
-
-      try {
-        const response = await fetch(tokenUrl, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-          },
-          body: params.toString()
-        });
-
-        const data = await response.json();
-
-        if (data.access_token) {
-          sessionStorage.setItem("access_token", data.access_token);
-          sessionStorage.setItem("patient_id", data.patient);
-          window.location.href = "patient-data.html"; // أو أي صفحة بيانات المريض
-        } else {
-          document.body.innerText = "❌ Token exchange failed: " + JSON.stringify(data, null, 2);
-        }
-      } catch (error) {
-        document.body.innerText = "❌ Error: " + error.message;
-      }
-    }
-
     window.onload = function () {
-      const query = new URLSearchParams(window.location.search);
-      const code = query.get("code");
+      // ✅ هذه الدالة جاهزة بعد تبادل الكود تلقائيًا باستخدام PKCE
+      FHIR.oauth2.ready()
+        .then(client => {
+          const patientId = client.patient.id;
+          const accessToken = client.state.tokenResponse.access_token;
 
-      if (code) {
-        exchangeCodeForToken(code);
-      } else {
-        document.body.innerText = "❌ No code found in URL.";
-      }
+          // ✅ نحفظ البيانات محليًا
+          sessionStorage.setItem("patient_id", patientId);
+          sessionStorage.setItem("access_token", accessToken);
+
+          // ✅ التوجيه إلى صفحة عرض بيانات المريض
+          window.location.href = "patient-data.html";
+        })
+        .catch(error => {
+          // ❌ عرض الخطأ في الصفحة مع التنسيق
+          document.body.innerHTML = `<h3 style="color: red;">❌ Error during OAuth2 redirect:</h3><pre>${JSON.stringify(error, null, 2)}</pre>`;
+        });
     };
   </script>
 </head>
 <body>
-  <p>Redirecting... Please wait.</p>
+  <p>Redirecting... Please wait...</p>
 </body>
 </html>
+

@@ -1,80 +1,53 @@
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Patient Data - CuraHub</title>
-  <link rel="stylesheet" href="css/style.css" />
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
-      padding: 20px;
-    }
+<script>
+  const accessToken = sessionStorage.getItem("access_token");
+  const patientId = sessionStorage.getItem("patient_id");
+  const baseUrl = sessionStorage.getItem("fhir_base_url") || "https://launch.smarthealthit.org/v/r4/fhir";
 
-    h2 {
-      color: #004d40;
-    }
+  // ✅ إنشاء العنصر تلقائيًا لو مش موجود
+  let infoDiv = document.getElementById("patientInfo");
+  if (!infoDiv) {
+    infoDiv = document.createElement("div");
+    infoDiv.id = "patientInfo";
+    infoDiv.style.margin = "20px";
+    infoDiv.style.fontSize = "16px";
+    document.body.appendChild(infoDiv);
+    console.warn("ℹ️ Created missing #patientInfo element automatically.");
+  }
 
-    .patient-info {
-      background: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
+  // ✅ تحقق من وجود التوكن والمعرف
+  if (!accessToken || !patientId) {
+    infoDiv.innerText = "❌ Missing login information. Please log in using FHIR.";
+  } else {
+    infoDiv.innerHTML = "⏳ Loading patient data...";
 
-    .field {
-      margin-bottom: 15px;
-    }
+    fetch(`${baseUrl}/Patient/${patientId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    })
+    .then(res => {
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return res.json();
+    })
+    .then(patient => {
+      const nameObj = patient.name?.[0];
+      const given = nameObj?.given?.join(" ") || "";
+      const family = nameObj?.family || "";
+      const fullName = (given + " " + family).trim() || "N/A";
 
-    .field strong {
-      display: inline-block;
-      width: 150px;
-    }
-  </style>
-</head>
-<body>
-  <h2>Patient Information</h2>
-  <div class="patient-info" id="patientInfo">
-    Loading...
-  </div>
+      const gender = patient.gender || "N/A";
+      const birthDate = patient.birthDate || "N/A";
 
-  <script>
-    const accessToken = sessionStorage.getItem("access_token");
-    const patientId = sessionStorage.getItem("patient_id");
-    const baseUrl = "https://launch.smarthealthit.org/v/r4/fhir";
-
-    if (!accessToken || !patientId) {
-      document.getElementById("patientInfo").innerText = "Missing login information.";
-    } else {
-      fetch(`${baseUrl}/Patient/${patientId}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        }
-      })
-      .then(res => res.json())
-      .then(patient => {
-        const infoDiv = document.getElementById("patientInfo");
-
-        const nameObj = patient.name?.[0];
-        const given = nameObj?.given?.join(" ") || "";
-        const family = nameObj?.family || "";
-        const fullName = (given + " " + family).trim() || "N/A";
-
-        const gender = patient.gender || "N/A";
-        const birthDate = patient.birthDate || "N/A";
-
-        infoDiv.innerHTML = `
-          <div class="field"><strong>Name:</strong> ${fullName}</div>
-          <div class="field"><strong>Gender:</strong> ${gender}</div>
-          <div class="field"><strong>Birth Date:</strong> ${birthDate}</div>
-        `;
-      })
-      .catch(err => {
-        console.error(err);
-        document.getElementById("patientInfo").innerText = "Failed to load patient data.";
-      });
-    }
-  </script>
-</body>
-</html>
+      infoDiv.innerHTML = `
+        <div class="field"><strong>Name:</strong> ${fullName}</div>
+        <div class="field"><strong>Gender:</strong> ${gender}</div>
+        <div class="field"><strong>Birth Date:</strong> ${birthDate}</div>
+      `;
+    })
+    .catch(err => {
+      console.error("❌ Error fetching patient data:", err);
+      infoDiv.innerHTML = "❌ Failed to load patient data. Please try logging in again.";
+    });
+  }
+</script>
