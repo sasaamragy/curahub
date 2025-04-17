@@ -1,0 +1,77 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Patient Data - CuraHub</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      padding: 20px;
+    }
+
+    h2 {
+      color: #004d40;
+    }
+
+    .patient-info {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .field {
+      margin-bottom: 15px;
+    }
+
+    .field strong {
+      display: inline-block;
+      width: 150px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Patient Information</h2>
+  <div class="patient-info" id="patientInfo">
+    Loading...
+  </div>
+
+  <script>
+    const accessToken = sessionStorage.getItem("access_token");
+    const patientId = sessionStorage.getItem("patient_id");
+    const baseUrl = "https://launch.smarthealthit.org/v/r4/fhir";
+
+    if (!accessToken || !patientId) {
+      document.getElementById("patientInfo").innerText = "Missing login information.";
+    } else {
+      fetch(`${baseUrl}/Patient/${patientId}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      })
+      .then(res => res.json())
+      .then(patient => {
+        const infoDiv = document.getElementById("patientInfo");
+
+        const name = patient.name?.[0]?.given?.join(" ") + " " + patient.name?.[0]?.family || "N/A";
+        const gender = patient.gender || "N/A";
+        const birthDate = patient.birthDate || "N/A";
+
+        infoDiv.innerHTML = `
+          <div class="field"><strong>Name:</strong> ${name}</div>
+          <div class="field"><strong>Gender:</strong> ${gender}</div>
+          <div class="field"><strong>Birth Date:</strong> ${birthDate}</div>
+        `;
+      })
+      .catch(err => {
+        console.error(err);
+        document.getElementById("patientInfo").innerText = "Failed to load patient data.";
+      });
+    }
+  </script>
+</body>
+</html>
+

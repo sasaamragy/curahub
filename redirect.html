@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Redirecting...</title>
+  <script>
+    async function exchangeCodeForToken(code) {
+      const tokenUrl = "https://launch.smarthealthit.org/v/r4/auth/token";
+
+      const clientId = "curahub-client-app"; // Client ID بتاعك من SMART launcher
+      const redirectUri = window.location.origin + "/redirect.html";
+
+      const params = new URLSearchParams();
+      params.append("grant_type", "authorization_code");
+      params.append("code", code);
+      params.append("redirect_uri", redirectUri);
+      params.append("client_id", clientId);
+
+      const response = await fetch(tokenUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: params.toString()
+      });
+
+      const data = await response.json();
+
+      if (data.access_token) {
+        sessionStorage.setItem("access_token", data.access_token);
+        sessionStorage.setItem("patient_id", data.patient);
+        window.location.href = "patient-data.html"; // ✅ غير لو عندك صفحة تانية
+      } else {
+        document.body.innerText = "Token exchange failed: " + JSON.stringify(data);
+      }
+    }
+
+    window.onload = function () {
+      const query = new URLSearchParams(window.location.search);
+      const code = query.get("code");
+
+      if (code) {
+        exchangeCodeForToken(code);
+      } else {
+        document.body.innerText = "No code found in URL.";
+      }
+    };
+  </script>
+</head>
+<body>
+  <p>Redirecting... Please wait.</p>
+</body>
+</html>

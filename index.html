@@ -1,0 +1,108 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Welcome to CuraHub</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+    }
+
+    header {
+      background-color: #004d40;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .container {
+      padding: 40px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #004d40;
+      font-size: 32px;
+    }
+
+    .about {
+      max-width: 800px;
+      margin: 40px auto;
+      text-align: center;
+      font-size: 16px;
+      line-height: 1.6;
+      color: #333;
+    }
+
+    .btn-group {
+      margin-top: 30px;
+    }
+
+    .btn-group a, .btn-group button {
+      display: inline-block;
+      margin: 10px;
+      padding: 15px 25px;
+      background-color: #004d40;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-group a:hover, .btn-group button:hover {
+      background-color: #00695c;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #004d40;
+      color: white;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>CuraHub</h1>
+  </header>
+
+  <div class="container">
+    <div class="about">
+      <h2>About CuraHub</h2>
+      <p>
+        Introducing a dedicated application that serves as a central hub, providing crucial support and guidance throughout the cancer journey. 
+        This platform offers valuable services for cancer patients and their loved ones, aiming to simplify navigation, enhance access to essential 
+        information and resources, and foster better communication. It also equips healthcare professionals with tools and resources to enhance 
+        patient care and streamline their work in oncology.
+      </p>
+    </div>
+
+    <h1>Welcome to CuraHub</h1>
+    <p>Please choose your role to proceed</p>
+
+    <div class="btn-group">
+      <a href="patient.html">Patient Dashboard</a>
+      <a href="navigator.html">Navigator Dashboard</a>
+      <a href="doctor.html">Healthcare Pro Dashboard</a>
+      <a href="proms.html">PROMs</a>
+      <button onclick="startSmartLogin()">Login with FHIR</button>
+    </div>
+  </div>
+
+  <footer>
+    © 2025 CuraHub. Empowering cancer care navigation.
+  </footer>
+
+  <script src="js/smart-login.js"></script>
+</body>
+</html>

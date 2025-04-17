@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Patient Observations - CuraHub</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #004d40;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .container {
+      padding: 40px;
+    }
+
+    h2 {
+      color: #004d40;
+    }
+
+    .obs-box {
+      background-color: white;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #004d40;
+      color: white;
+      font-size: 14px;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>CuraHub - Patient Observations</h1>
+  </header>
+
+  <div class="container">
+    <h2>Latest Medical Observations</h2>
+    <div id="observations" class="obs-box">
+      Loading observations...
+    </div>
+  </div>
+
+  <footer>
+    © 2025 CuraHub. Empowering cancer care navigation.
+  </footer>
+
+  <script src="js/fhir-observations.js"></script>
+</body>
+</html>

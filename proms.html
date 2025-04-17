@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>PROMs - CuraHub</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="js/proms.js" defer></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+    }
+
+    header {
+      background-color: #004d40;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .container {
+      padding: 40px;
+      text-align: center;
+    }
+
+    h2 {
+      color: #004d40;
+    }
+
+    p {
+      font-size: 16px;
+      color: #333;
+    }
+
+    form {
+      margin-top: 30px;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      display: inline-block;
+      text-align: left;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    select, input[type="radio"] {
+      margin-bottom: 15px;
+    }
+
+    fieldset {
+      border: none;
+      margin: 20px 0;
+      padding: 0;
+    }
+
+    legend {
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: #004d40;
+    }
+
+    label input {
+      margin-right: 8px;
+    }
+
+    button {
+      background-color: #004d40;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #00695c;
+    }
+
+    .back {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #004d40;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+    }
+
+    .back:hover {
+      background-color: #00695c;
+    }
+
+    #submission-message {
+      margin-top: 20px;
+      color: green;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #004d40;
+      color: white;
+      font-size: 14px;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>CuraHub</h1>
+  </header>
+
+  <div class="container">
+    <h2>PROMs - Patient Reported Outcome Measures</h2>
+    <p>Fill out your health questionnaires to help us monitor your condition and improve your care experience.</p>
+
+    <form id="prom-form" name="prom-questionnaire">
+      <div>
+        <label for="overall_health">How would you rate your overall health today?</label>
+        <select name="overall_health" id="overall_health" required>
+          <option value="">Select</option>
+          <option value="excellent">Excellent</option>
+          <option value="good">Good</option>
+          <option value="fair">Fair</option>
+          <option value="poor">Poor</option>
+        </select>
+      </div>
+
+      <fieldset>
+        <legend>Do you feel any pain currently?</legend>
+        <label><input type="radio" name="pain" value="yes" required> Yes</label>
+        <label><input type="radio" name="pain" value="no" required> No</label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Have you experienced difficulty in performing daily activities?</legend>
+        <label><input type="radio" name="daily_difficulty" value="yes" required> Yes</label>
+        <label><input type="radio" name="daily_difficulty" value="no" required> No</label>
+      </fieldset>
+
+      <div>
+        <label for="anxiety_level">How anxious do you feel today?</label>
+        <select name="anxiety_level" id="anxiety_level" required>
+          <option value="">Select</option>
+          <option value="not_at_all">Not at all</option>
+          <option value="a_little">A little</option>
+          <option value="moderately">Moderately</option>
+          <option value="extremely">Extremely</option>
+        </select>
+      </div>
+
+      <button type="submit">Submit</button>
+    </form>
+
+    <div id="submission-message"></div>
+
+    <a href="index.html" class="back">← Back to Home</a>
+  </div>
+
+  <footer>
+    © 2025 CuraHub. Empowering cancer care navigation.
+  </footer>
+
+</body>
+</html>
