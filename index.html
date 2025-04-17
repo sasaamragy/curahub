@@ -7,6 +7,7 @@
   <meta charset="UTF-8" />
   <title>Welcome to CuraHub</title>
   <link rel="stylesheet" href="css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/fhirclient/build/fhir-client.min.js"></script>
   <style>
     body {
       margin: 0;
@@ -103,6 +104,16 @@
     © 2025 CuraHub. Empowering cancer care navigation.
   </footer>
 
-  <script src="js/smart-login.js"></script>
+  <script>
+    function startSmartLogin() {
+      FHIR.oauth2.authorize({
+        client_id: "curahub-client-app",
+        scope: "launch openid fhirUser patient/*.read",
+        redirect_uri: "https://sasaamragy.github.io/curahub/redirect.html",
+        iss: "https://launch.smarthealthit.org/v/r4"
+      });
+    }
+  </script>
 </body>
 </html>
+

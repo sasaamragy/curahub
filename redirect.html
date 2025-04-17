@@ -6,9 +6,10 @@
   <script>
     async function exchangeCodeForToken(code) {
       const tokenUrl = "https://launch.smarthealthit.org/v/r4/auth/token";
+      const clientId = "curahub-client-app"; // Client ID من SMART Launcher
 
-      const clientId = "curahub-client-app"; // Client ID بتاعك من SMART launcher
-      const redirectUri = window.location.origin + "/redirect.html";
+      // ✅ بدّلي بالرابط الفعلي لموقعك (لو GitHub Pages أو Netlify)
+      const redirectUri = "https://sasaamragy.github.io/curahub/redirect.html";
 
       const params = new URLSearchParams();
       params.append("grant_type", "authorization_code");
@@ -16,22 +17,26 @@
       params.append("redirect_uri", redirectUri);
       params.append("client_id", clientId);
 
-      const response = await fetch(tokenUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body: params.toString()
-      });
+      try {
+        const response = await fetch(tokenUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+          },
+          body: params.toString()
+        });
 
-      const data = await response.json();
+        const data = await response.json();
 
-      if (data.access_token) {
-        sessionStorage.setItem("access_token", data.access_token);
-        sessionStorage.setItem("patient_id", data.patient);
-        window.location.href = "patient-data.html"; // ✅ غير لو عندك صفحة تانية
-      } else {
-        document.body.innerText = "Token exchange failed: " + JSON.stringify(data);
+        if (data.access_token) {
+          sessionStorage.setItem("access_token", data.access_token);
+          sessionStorage.setItem("patient_id", data.patient);
+          window.location.href = "patient-data.html"; // أو أي صفحة بيانات المريض
+        } else {
+          document.body.innerText = "❌ Token exchange failed: " + JSON.stringify(data, null, 2);
+        }
+      } catch (error) {
+        document.body.innerText = "❌ Error: " + error.message;
       }
     }
 
@@ -42,7 +47,7 @@
       if (code) {
         exchangeCodeForToken(code);
       } else {
-        document.body.innerText = "No code found in URL.";
+        document.body.innerText = "❌ No code found in URL.";
       }
     };
   </script>

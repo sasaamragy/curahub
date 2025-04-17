@@ -56,12 +56,16 @@
       .then(patient => {
         const infoDiv = document.getElementById("patientInfo");
 
-        const name = patient.name?.[0]?.given?.join(" ") + " " + patient.name?.[0]?.family || "N/A";
+        const nameObj = patient.name?.[0];
+        const given = nameObj?.given?.join(" ") || "";
+        const family = nameObj?.family || "";
+        const fullName = (given + " " + family).trim() || "N/A";
+
         const gender = patient.gender || "N/A";
         const birthDate = patient.birthDate || "N/A";
 
         infoDiv.innerHTML = `
-          <div class="field"><strong>Name:</strong> ${name}</div>
+          <div class="field"><strong>Name:</strong> ${fullName}</div>
           <div class="field"><strong>Gender:</strong> ${gender}</div>
           <div class="field"><strong>Birth Date:</strong> ${birthDate}</div>
         `;
@@ -74,4 +78,3 @@
   </script>
 </body>
 </html>
-

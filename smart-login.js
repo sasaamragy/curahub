@@ -1,12 +1,7 @@
 function startSmartLogin() {
-  const clientId = "curahub-client-app"; // ✅ Client ID بتاعك (أي اسم مؤقت في SMART Launcher)
-  const redirectUri = "https://your-site-name.netlify.app/redirect.html"; // ✅ بدّلي ده بالرابط الفعلي لموقعك
-
-  const scope = "launch openid fhirUser patient/*.read";
-  const fhirServer = "https://launch.smarthealthit.org/v/r4";
-  const authorizeUrl = `${fhirServer}/auth/authorize`;
-
-  const url = `${authorizeUrl}?response_type=code&client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${encodeURIComponent(scope)}&aud=${encodeURIComponent(fhirServer)}`;
-
-  window.location.href = url;
+  FHIR.oauth2.authorize({
+    client_id: "my-web-app", // ده اسم افتراضي في SMART Launcher، ممكن تغيريه لو سجلتي اسم مختلف
+    scope: "launch openid fhirUser patient/*.read",
+    redirect_uri: "https://sasaamragy.github.io/curahub/redirect.html"
+  });
 }
