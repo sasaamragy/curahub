@@ -4,25 +4,27 @@
 <head>
   <meta charset="UTF-8" />
   <title>Redirecting...</title>
-  <script src="https://cdn.jsdelivr.net/npm/fhirclient/build/fhir-client.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fhirclient@2.1.7/build/fhir-client.min.js"></script>
   <script>
     window.onload = function () {
-      // ✅ هذه الدالة جاهزة بعد تبادل الكود تلقائيًا باستخدام PKCE
       FHIR.oauth2.ready()
         .then(client => {
           const patientId = client.patient.id;
           const accessToken = client.state.tokenResponse.access_token;
 
-          // ✅ نحفظ البيانات محليًا
+          // حفظ البيانات في التخزين المؤقت
           sessionStorage.setItem("patient_id", patientId);
           sessionStorage.setItem("access_token", accessToken);
 
-          // ✅ التوجيه إلى صفحة عرض بيانات المريض
+          // الانتقال لصفحة عرض بيانات المريض
           window.location.href = "patient-data.html";
         })
         .catch(error => {
-          // ❌ عرض الخطأ في الصفحة مع التنسيق
-          document.body.innerHTML = `<h3 style="color: red;">❌ Error during OAuth2 redirect:</h3><pre>${JSON.stringify(error, null, 2)}</pre>`;
+          // عرض الخطأ إذا فشل تسجيل الدخول
+          document.body.innerHTML = `
+            <h3 style="color: red;">❌ Error during OAuth2 redirect:</h3>
+            <pre>${JSON.stringify(error, null, 2)}</pre>
+          `;
         });
     };
   </script>
@@ -31,4 +33,3 @@
   <p>Redirecting... Please wait...</p>
 </body>
 </html>
-
