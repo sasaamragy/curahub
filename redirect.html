@@ -1,14 +1,15 @@
 
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Redirecting...</title>
+  <!-- تحميل مكتبة FHIR -->
+  <script src="https://cdn.jsdelivr.net/npm/fhirclient/build/fhir-client.min.js"></script>
+</head>
+<body>
+  <p>⏳ Redirecting... Please wait...</p>
 
-  <!-- ✅ تحميل مكتبة FHIR -->
-  <script src="https://cdn.jsdelivr.net/npm/fhirclient@2.1.7/build/fhir-client.min.js"></script>
-
-  <!-- ✅ سكربت تسجيل الدخول بعد الرجوع من SMART -->
   <script>
     window.onload = function () {
       FHIR.oauth2.ready()
@@ -36,8 +37,5 @@
         });
     };
   </script>
-</head>
-<body>
-  <p>⏳ Redirecting... Please wait...</p>
 </body>
 </html>
