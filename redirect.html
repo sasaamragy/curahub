@@ -9,27 +9,34 @@
     window.onload = function () {
       FHIR.oauth2.ready()
         .then(client => {
-          const patientId = client.patient.id;
-          const accessToken = client.state.tokenResponse.access_token;
+          const patientId = client.patient?.id;
+          const accessToken = client.state?.tokenResponse?.access_token;
+          const fhirBaseUrl = client.state?.serverUrl || "https://launch.smarthealthit.org/v/r4";
 
-          // حفظ البيانات في التخزين المؤقت
+          if (!patientId || !accessToken) {
+            throw new Error("Missing patient ID or access token.");
+          }
+
+          // ✅ حفظ البيانات في التخزين المؤقت
           sessionStorage.setItem("patient_id", patientId);
           sessionStorage.setItem("access_token", accessToken);
+          sessionStorage.setItem("fhir_base_url", fhirBaseUrl);
 
-          // الانتقال لصفحة عرض بيانات المريض
+          // ✅ الانتقال لصفحة عرض بيانات المريض
           window.location.href = "patient-data.html";
         })
         .catch(error => {
-          // عرض الخطأ إذا فشل تسجيل الدخول
+          // ❌ عرض الخطأ إذا فشل تسجيل الدخول
+          console.error("OAuth2 Redirect Error:", error);
           document.body.innerHTML = `
             <h3 style="color: red;">❌ Error during OAuth2 redirect:</h3>
-            <pre>${JSON.stringify(error, null, 2)}</pre>
+            <pre>${error.message || JSON.stringify(error, null, 2)}</pre>
           `;
         });
     };
   </script>
 </head>
 <body>
-  <p>Redirecting... Please wait...</p>
+  <p>⏳ Redirecting... Please wait...</p>
 </body>
 </html>

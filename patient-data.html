@@ -1,10 +1,11 @@
 
 <script>
+  // استرجاع البيانات من sessionStorage
   const accessToken = sessionStorage.getItem("access_token");
   const patientId = sessionStorage.getItem("patient_id");
-  const baseUrl = sessionStorage.getItem("fhir_base_url") || "https://launch.smarthealthit.org/v/r4/fhir";
+  const baseUrl = sessionStorage.getItem("fhir_base_url") || "https://launch.smarthealthit.org/v/r4";
 
-  // ✅ إنشاء العنصر تلقائيًا لو مش موجود
+  // البحث عن العنصر لعرض بيانات المريض، أو إنشاؤه إذا لم يكن موجودًا
   let infoDiv = document.getElementById("patientInfo");
   if (!infoDiv) {
     infoDiv = document.createElement("div");
@@ -15,12 +16,13 @@
     console.warn("ℹ️ Created missing #patientInfo element automatically.");
   }
 
-  // ✅ تحقق من وجود التوكن والمعرف
+  // التحقق من وجود التوكن ومعرف المريض
   if (!accessToken || !patientId) {
     infoDiv.innerText = "❌ Missing login information. Please log in using FHIR.";
   } else {
     infoDiv.innerHTML = "⏳ Loading patient data...";
 
+    // جلب بيانات المريض من FHIR
     fetch(`${baseUrl}/Patient/${patientId}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`
@@ -32,9 +34,10 @@
     })
     .then(patient => {
       const nameObj = patient.name?.[0];
-      const given = nameObj?.given?.join(" ") || "";
-      const family = nameObj?.family || "";
-      const fullName = (given + " " + family).trim() || "N/A";
+      const fullName = [
+        ...(nameObj?.given || []),
+        nameObj?.family || ""
+      ].join(" ").trim() || "N/A";
 
       const gender = patient.gender || "N/A";
       const birthDate = patient.birthDate || "N/A";
