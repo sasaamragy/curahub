@@ -1,28 +1,43 @@
 
-<script>
-  window.onload = function () {
-    FHIR.oauth2.ready()
-      .then(client => {
-        console.log("✅ FHIR Client Ready");
-        console.log("Patient ID:", client.patient.id);
-        console.log("Access Token:", client.state.tokenResponse.access_token);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Redirecting...</title>
 
-        const patientId = client.patient.id;
-        const accessToken = client.state.tokenResponse.access_token;
+  <!-- ✅ تحميل مكتبة FHIR -->
+  <script src="https://cdn.jsdelivr.net/npm/fhirclient@2.1.7/build/fhir-client.min.js"></script>
 
-        // حفظ البيانات في التخزين المؤقت
-        sessionStorage.setItem("patient_id", patientId);
-        sessionStorage.setItem("access_token", accessToken);
+  <!-- ✅ سكربت تسجيل الدخول بعد الرجوع من SMART -->
+  <script>
+    window.onload = function () {
+      FHIR.oauth2.ready()
+        .then(client => {
+          console.log("✅ FHIR Client Ready");
+          console.log("Patient ID:", client.patient.id);
+          console.log("Access Token:", client.state.tokenResponse.access_token);
 
-        // الانتقال لصفحة عرض بيانات المريض
-        window.location.href = "patient-data.html";
-      })
-      .catch(error => {
-        console.error("❌ OAuth2 redirect error:", error);
-        document.body.innerHTML = `
-          <h3 style="color: red;">❌ Error during OAuth2 redirect:</h3>
-          <pre>${JSON.stringify(error, null, 2)}</pre>
-        `;
-      });
-  };
-</script>
+          const patientId = client.patient.id;
+          const accessToken = client.state.tokenResponse.access_token;
+
+          // حفظ البيانات في التخزين المؤقت
+          sessionStorage.setItem("patient_id", patientId);
+          sessionStorage.setItem("access_token", accessToken);
+
+          // الانتقال لصفحة عرض بيانات المريض
+          window.location.href = "patient-data.html";
+        })
+        .catch(error => {
+          console.error("❌ OAuth2 redirect error:", error);
+          document.body.innerHTML = `
+            <h3 style="color: red;">❌ Error during OAuth2 redirect:</h3>
+            <pre>${JSON.stringify(error, null, 2)}</pre>
+          `;
+        });
+    };
+  </script>
+</head>
+<body>
+  <p>⏳ Redirecting... Please wait...</p>
+</body>
+</html>
