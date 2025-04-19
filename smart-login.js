@@ -1,8 +1,8 @@
 
 FHIR.oauth2.authorize({
-  client_id: "curahub-client-app",
+  clientId: "curahub-client-app", // ✅ استخدم clientId بدل client_id
   scope: "launch openid fhirUser patient/*.read",
-  redirect_uri: "https://sasaamragy.github.io/curahub/redirect.html",
- iss: "https://launch.smarthealthit.org/v/r4",
+  redirectUri: "https://sasaamragy.github.io/curahub/redirect.html", // ✅ استخدم camelCase: redirectUri
+  iss: "https://launch.smarthealthit.org/v/r4",
   pkce: true
 });
