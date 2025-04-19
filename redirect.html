@@ -12,29 +12,38 @@
 
   <script>
     window.onload = function () {
-      FHIR.oauth2.ready()
-        .then(client => {
-          console.log("✅ FHIR Client Ready");
-          console.log("Patient ID:", client.patient.id);
-          console.log("Access Token:", client.state.tokenResponse.access_token);
+      try {
+        console.log("🌐 Starting OAuth2 redirect handling...");
+        FHIR.oauth2.ready()
+          .then(client => {
+            console.log("✅ FHIR Client Ready");
+            console.log("Patient ID:", client.patient.id);
+            console.log("Access Token:", client.state.tokenResponse.access_token);
 
-          const patientId = client.patient.id;
-          const accessToken = client.state.tokenResponse.access_token;
+            const patientId = client.patient.id;
+            const accessToken = client.state.tokenResponse.access_token;
 
-          // حفظ البيانات في التخزين المؤقت
-          sessionStorage.setItem("patient_id", patientId);
-          sessionStorage.setItem("access_token", accessToken);
+            // حفظ البيانات في التخزين المؤقت
+            sessionStorage.setItem("patient_id", patientId);
+            sessionStorage.setItem("access_token", accessToken);
 
-          // الانتقال لصفحة عرض بيانات المريض
-          window.location.href = "patient-data.html";
-        })
-        .catch(error => {
-          console.error("❌ OAuth2 redirect error:", error);
-          document.body.innerHTML = `
-            <h3 style="color: red;">❌ Error during OAuth2 redirect:</h3>
-            <pre>${JSON.stringify(error, null, 2)}</pre>
-          `;
-        });
+            // الانتقال لصفحة عرض بيانات المريض
+            window.location.href = "patient-data.html";
+          })
+          .catch(error => {
+            console.error("❌ OAuth2 redirect error (inside .catch):", error);
+            document.body.innerHTML = `
+              <h3 style="color: red;">❌ Error during OAuth2 redirect:</h3>
+              <pre>${JSON.stringify(error, null, 2)}</pre>
+            `;
+          });
+      } catch (e) {
+        console.error("❌ Error during script execution (outside catch):", e);
+        document.body.innerHTML = `
+          <h3 style="color: red;">❌ Fatal error in redirect.html</h3>
+          <pre>${JSON.stringify(e, null, 2)}</pre>
+        `;
+      }
     };
   </script>
 </body>
