@@ -20,11 +20,13 @@
 
     .container {
       padding: 40px;
-      text-align: center;
+      max-width: 600px;
+      margin: auto;
     }
 
     h2 {
       color: #004d40;
+      margin-bottom: 20px;
     }
 
     p {
@@ -40,9 +42,17 @@
 
     ul li {
       background-color: #e0f2f1;
-      padding: 10px;
+      padding: 12px 16px;
       margin-bottom: 10px;
       border-radius: 6px;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .status {
+      font-size: 18px;
     }
 
     a.back {
@@ -79,10 +89,10 @@
     <h2>Patient Goals</h2>
     <p>Here you can view your health goals and progress.</p>
 
-    <ul>
-      <li>✔️ Walk 30 minutes daily</li>
-      <li>✔️ Complete weekly chemotherapy session</li>
-      <li>⏳ Improve sleep habits</li>
+    <ul id="goalsList">
+      <li><span class="status">✔️</span> Walk 30 minutes daily</li>
+      <li><span class="status">✔️</span> Complete weekly chemotherapy session</li>
+      <li><span class="status">⏳</span> Improve sleep habits</li>
     </ul>
 
     <a href="patient.html" class="back">← Back to Dashboard</a>
@@ -94,4 +104,3 @@
 
 </body>
 </html>
-

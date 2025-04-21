@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <title>Care Plan - CuraHub</title>
   <link rel="stylesheet" href="css/style.css" />
-  <script src="js/careplan.js" defer></script>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -64,5 +63,58 @@
     © 2025 CuraHub. Empowering cancer care navigation.
   </footer>
 
+  <!-- كود جلب وعرض الـ CarePlan -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const accessToken = sessionStorage.getItem("access_token");
+      const patientId = sessionStorage.getItem("patient_id");
+      const baseUrl = "https://launch.smarthealthit.org/v/r4/fhir";
+      const container = document.getElementById("careplans-container");
+
+      if (!accessToken || !patientId) {
+        container.innerText = "❌ Missing patient or access information.";
+        return;
+      }
+
+      fetch(`${baseUrl}/CarePlan?patient=${patientId}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      })
+        .then(response => response.json())
+        .then(data => {
+          const plans = data.entry || [];
+
+          if (plans.length === 0) {
+            container.innerText = "No care plans found.";
+            return;
+          }
+
+          container.innerHTML = plans.map(plan => {
+            const resource = plan.resource;
+            const title = resource.title || "Untitled Plan";
+            const status = resource.status || "Unknown";
+            const intent = resource.intent || "N/A";
+            const start = resource.period?.start || "N/A";
+            const end = resource.period?.end || "N/A";
+            const description = resource.description || "No description provided.";
+
+            return `
+              <div class="plan-box">
+                <strong>Title:</strong> ${title}<br>
+                <strong>Status:</strong> ${status}<br>
+                <strong>Intent:</strong> ${intent}<br>
+                <strong>Period:</strong> ${start} - ${end}<br>
+                <p><strong>Description:</strong> ${description}</p>
+              </div>
+            `;
+          }).join("");
+        })
+        .catch(err => {
+          console.error(err);
+          container.innerText = "❌ Failed to load care plans.";
+        });
+    });
+  </script>
 </body>
 </html>
